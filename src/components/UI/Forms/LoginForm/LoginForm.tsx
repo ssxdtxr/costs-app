@@ -5,7 +5,6 @@ import { defaultValues } from '@/components/UI/Forms/contants.ts'
 import { Button } from '../../Button/Button.tsx'
 import { ValidationError } from '@/components/ValidationError/ValidationError.tsx'
 import { Link } from 'react-router-dom'
-import { Background } from '@/components/UI/Background/Background.tsx'
 interface ILogin {
   name: string
   password: string

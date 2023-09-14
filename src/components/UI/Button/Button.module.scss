@@ -1,0 +1,17 @@
+.btn {
+  cursor: pointer;
+  padding: 10px 18px;
+  background-color: #0069D9;
+  border-radius: 5px;
+  color: #fff;
+  width: max-content;
+  transition: opacity .15s ease-in-out;
+  &:hover {
+    opacity: .7;
+  }
+  &:active {
+    transition: scale .1s ease-in-out;
+    opacity: 1;
+    scale: 1.3;
+  }
+}

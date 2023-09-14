@@ -1,0 +1,17 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+  }
+  .registration {
+    color: #878787;
+    margin-left: 5px;
+    &:hover {
+      border-bottom: 1px solid #878787;
+    }
+  }
+}

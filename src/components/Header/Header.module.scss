@@ -1,0 +1,14 @@
+.header {
+  background-color: #343A40;
+  margin-bottom: 50px;
+  .main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    h1 {
+      font-size: 40px;
+      font-weight: 400;
+      padding: 10px 0;
+    }
+  }
+}

@@ -11,7 +11,7 @@ export const Background = () => {
     }
   }, []);
   return (
-    <video className={styles.videoTag} autoPlay loop muted>
+    <video ref={videoRef} className={styles.videoTag} autoPlay loop muted>
       <source src={sample} type='video/mp4' />
     </video>
   )

@@ -1,29 +1,35 @@
 import { INotification } from '@/types/INotification.ts'
-import { FC, useEffect, useState } from 'react'
+import { FC, memo, useEffect, useState } from 'react'
 import styles from './Notification.module.scss'
 import cn from 'classnames'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useActions } from '@/hooks/useActions.ts'
 
 const variantsNotifications = {
   initial: {
-    x: '120%',
+    y: '-120%',
   },
   animate: {
-    x: 0,
+    y: 0,
   },
   exit: {
-    x: '120%',
-  }
+    y: '-140%',
+  },
 }
-export const Notification: FC<INotification> = ({ message, type }) => {
+export const Notification: FC<INotification> = memo(({ message, type, id }) => {
   const [exit, setExit] = useState<boolean>(false)
-
+  const { deleteNotification } = useActions()
 
   useEffect(() => {
     setTimeout(() => {
-      setExit(true)
-    }, 3000);
+      removeNotification()
+    }, 3000)
   }, [])
+
+  const removeNotification = (): void => {
+    setExit(true)
+    deleteNotification(id)
+  }
   return (
     <AnimatePresence>
       {
@@ -36,11 +42,11 @@ export const Notification: FC<INotification> = ({ message, type }) => {
         >
           <div className={cn(styles.item, styles[type])}>
             {message}
-            <button onClick={() => setExit(true)}>&</button>
+            <button onClick={() => removeNotification}>&</button>
           </div>
         </motion.div>
       }
     </AnimatePresence>
   )
-}
+})
 

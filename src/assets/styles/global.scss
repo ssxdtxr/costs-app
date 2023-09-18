@@ -13,7 +13,11 @@ body {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   color: #fff;
-  background-color: #191D21;
+  background-image: url("../img/back.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh;
 }
 input,
 button {

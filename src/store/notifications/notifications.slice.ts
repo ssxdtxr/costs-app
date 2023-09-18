@@ -1,5 +1,6 @@
 import { INotification } from '@/types/INotification.ts'
 import { createSlice } from '@reduxjs/toolkit'
+import { v4 } from 'uuid'
 
 interface NotificationsState {
   notifications: INotification[]
@@ -10,12 +11,18 @@ const initialState: NotificationsState = {
 }
 
 export const NotificationsSlice = createSlice({
-  name: 'books',
+  name: 'notifications',
   initialState,
   reducers: {
-    newNotification: (state, {payload: note}) => {
-      state.notifications.push(note)
+    newNotification: (state, {payload: note}): void => {
+      state.notifications.push({
+        id: v4(),
+        ...note
+      })
     },
+    deleteNotification: (state, {payload: id}): void => {
+      state.notifications = state.notifications.filter(note => note.id !== id)
+    }
   }
 })
 

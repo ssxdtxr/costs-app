@@ -4,18 +4,18 @@ import { FormInput } from '../IFormInput/IFormInput .tsx'
 import { defaultValues } from '@/components/UI/Forms/contants.ts'
 import { Button } from '../../Button/Button.tsx'
 import { ValidationError } from '@/components/ValidationError/ValidationError.tsx'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useMutation } from 'react-query'
 import { UserService } from '@/services/user/user.service.ts'
 import Loading from '@/components/Loading/Loading.tsx'
 import { IUser } from '@/types/IUser.ts'
 import { useActions } from '@/hooks/useActions.ts'
-import { useTypedSelectorHook } from '@/hooks/TypedUseSelectorHook.ts'
+import { AxiosError } from 'axios'
 
 export const LoginForm = () => {
   const { newNotification } = useActions()
-  const {notifications} = useTypedSelectorHook(state => state.notifications)
-  console.log(notifications)
+const navigate = useNavigate()
+
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
       username: '',
@@ -26,10 +26,13 @@ export const LoginForm = () => {
   })
 
   const { isLoading, mutateAsync } = useMutation(['user'], (body: IUser) => UserService.login(body), {
-    onSuccess: (data) => {
-      console.log(data)
-      newNotification({ type: 'Success', message: 'eqweqw', })
+    onSuccess: () => {
+      newNotification({ type: 'Success', message: 'Вы успешно вошли в аккаунт', })
+      navigate('/costs')
     },
+    onError: (error: AxiosError<{message: string}>) => {
+      newNotification({ type: 'Error', message: error.response?.data.message, })
+    }
   })
 
 
@@ -41,7 +44,7 @@ export const LoginForm = () => {
     <div className={styles.login}>
       {
         isLoading &&
-        <Loading text='Заходим в аккаунт' />
+        <Loading text='Проверяем данные'/>
       }
       <form onSubmit={handleSubmit(loginHandler)}>
         <h1>Вход</h1>
@@ -68,7 +71,6 @@ export const LoginForm = () => {
           errors?.password && <ValidationError error={errors?.password?.message as string} />
         }
         <Button>Войти</Button>
-
       </form>
       <div>
         Еще нет аккаунта?

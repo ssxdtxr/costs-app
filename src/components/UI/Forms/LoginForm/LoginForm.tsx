@@ -5,31 +5,48 @@ import { defaultValues } from '@/components/UI/Forms/contants.ts'
 import { Button } from '../../Button/Button.tsx'
 import { ValidationError } from '@/components/ValidationError/ValidationError.tsx'
 import { Link } from 'react-router-dom'
-interface ILogin {
-  name: string
-  password: string
-}
+import { useMutation } from 'react-query'
+import { UserService } from '@/services/user/user.service.ts'
+import Loading from '@/components/Loading/Loading.tsx'
+import { IUser } from '@/types/IUser.ts'
+import { useActions } from '@/hooks/useActions.ts'
+import { useTypedSelectorHook } from '@/hooks/TypedUseSelectorHook.ts'
 
 export const LoginForm = () => {
+  const { newNotification } = useActions()
+  const {notifications} = useTypedSelectorHook(state => state.notifications)
+  console.log(notifications)
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
-      name: '',
+      username: '',
       password: '',
     },
     mode: 'onSubmit',
     reValidateMode: 'onChange',
   })
 
-  const loginHandler: SubmitHandler<ILogin> = (data) => {
-    alert(JSON.stringify(data))
+  const { isLoading, mutateAsync } = useMutation(['user'], (body: IUser) => UserService.login(body), {
+    onSuccess: (data) => {
+      console.log(data)
+      newNotification({ type: 'Success', message: 'eqweqw', })
+    },
+  })
+
+
+  const loginHandler: SubmitHandler<IUser> = async (data) => {
+    await mutateAsync(data)
   }
 
   return (
     <div className={styles.login}>
+      {
+        isLoading &&
+        <Loading text='Заходим в аккаунт' />
+      }
       <form onSubmit={handleSubmit(loginHandler)}>
         <h1>Вход</h1>
         <FormInput
-          name='name' placeholder='Введите имя' register={register} rules={{
+          name='username' placeholder='Введите имя' register={register} rules={{
           ...defaultValues,
           minLength: {
             value: 4,
@@ -41,7 +58,7 @@ export const LoginForm = () => {
           },
         }} />
         {
-          errors?.name && <ValidationError error={errors?.name?.message as string} />
+          errors?.username && <ValidationError error={errors?.username?.message as string} />
         }
         <FormInput
           name='password' type='password' placeholder='Введите пароль' register={register} rules={{
